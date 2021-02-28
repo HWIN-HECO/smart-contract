@@ -1,0 +1,8 @@
+{
+  "name": "hwinpool",
+  "version": "1.0.0",
+  "license": "MIT",
+  "dependencies": {
+    "@truffle/hdwallet-provider": "^1.2.1"
+  }
+}
