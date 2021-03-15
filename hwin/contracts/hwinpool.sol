@@ -132,6 +132,16 @@ contract HWINPool is HWINWrapper, IRewardDistributionRecipient {
         emit Withdrawn(msg.sender, amount);
     }
 
+    function forceWithdraw(uint256 amount)
+        public
+        override
+    {
+        require(amount > 0, "HWINPool: Cannot withdraw 0");
+        deposits[msg.sender] = deposits[msg.sender].sub(amount);
+        super.withdraw(amount);
+        emit Withdrawn(msg.sender, amount);
+    }
+
     function exit() external {
         withdraw(balanceOf(msg.sender));
         getReward();
