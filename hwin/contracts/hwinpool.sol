@@ -53,6 +53,7 @@ contract HWINPool is HWINWrapper, IRewardDistributionRecipient {
     event RewardAdded(uint256 reward);
     event Staked(address indexed user, uint256 amount);
     event Withdrawn(address indexed user, uint256 amount);
+    event EmergencyWithdraw(address indexed user, uint256 amount);
     event RewardPaid(address indexed user, uint256 reward);
 
     constructor(
@@ -132,14 +133,15 @@ contract HWINPool is HWINWrapper, IRewardDistributionRecipient {
         emit Withdrawn(msg.sender, amount);
     }
 
-    function forceWithdraw(uint256 amount)
+    // Withdraw without caring about rewards. EMERGENCY ONLY.
+    function emergencyWithdraw()
         public
         override
     {
-        require(amount > 0, "HWINPool: Cannot withdraw 0");
-        deposits[msg.sender] = deposits[msg.sender].sub(amount);
+        uint256 amount = deposits[msg.sender];
+        deposits[msg.sender] = 0;
         super.withdraw(amount);
-        emit Withdrawn(msg.sender, amount);
+        emit EmergencyWithdraw(msg.sender, amount);
     }
 
     function exit() external {
